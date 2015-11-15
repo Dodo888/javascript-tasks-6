@@ -28,6 +28,17 @@ module.exports = function () {
             }
         },
 
+        overflow: function() {
+            if (this.date.hours < 0) {
+                this.date.day--;
+                this.date.hours += 24;
+            }
+            if (this.date.hours > 24) {
+                this.date.day++;
+                this.date.hours -= 24;
+            }
+        },
+
         // Выводит дату в переданном формате
         format: function (pattern) {
             pattern = pattern.replace('%DD', ['ПН', 'ВТ', 'СР'][this.date.day +
@@ -41,22 +52,29 @@ module.exports = function () {
             return pattern;
         },
 
+        isSoonerThan: function (moment) {
+            return ((this.date.day < moment.date.day) ||
+                (this.date.day == moment.date.day && this.date.hours < moment.date.hours) ||
+                (this.date.day == moment.date.day && this.date.hours == moment.date.hours &&
+                this.date.minutes == moment.date.minutes))
+        },
+
         // Возвращает кол-во времени между текущей датой и переданной `moment`
         // в человекопонятном виде
         fromMoment: function (moment) {
-            var differenceInMinutes = (moment.date.day - this.date.day) * 24 * 60 +
-                (moment.date.hours - this.date.hours) * 60 +
-                (moment.date.minutes - this.date.minutes);
+            var differenceInMinutes = (this.date.day - moment.date.day) * 24 * 60 +
+                (this.date.hours - moment.date.hours) * 60 +
+                (this.date.minutes - moment.date.minutes);
             var resultString = '';
             if (differenceInMinutes >= 24 * 60) {
-                resultString += Math.floor(differenceInMinutes / 24 * 60) + ' дней, ';
+                resultString += Math.floor(differenceInMinutes / (24 * 60)) + ' дней, ';
             }
             differenceInMinutes = differenceInMinutes % (24 * 60);
             if (differenceInMinutes >= 60) {
                 resultString += Math.floor(differenceInMinutes / 60) + ' часов, ';
             }
             differenceInMinutes = differenceInMinutes % 60;
-            if (differenceInMinutes == 0) {
+            if (differenceInMinutes != 0) {
                 resultString += differenceInMinutes + ' минут';
             }
             return resultString;
