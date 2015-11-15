@@ -28,7 +28,7 @@ module.exports = function () {
             }
         },
 
-        overflow: function() {
+        overflow: function () {
             if (this.date.hours < 0) {
                 this.date.day--;
                 this.date.hours += 24;
@@ -56,7 +56,7 @@ module.exports = function () {
             return ((this.date.day < moment.date.day) ||
                 (this.date.day == moment.date.day && this.date.hours < moment.date.hours) ||
                 (this.date.day == moment.date.day && this.date.hours == moment.date.hours &&
-                this.date.minutes == moment.date.minutes))
+                this.date.minutes == moment.date.minutes));
         },
 
         // Возвращает кол-во времени между текущей датой и переданной `moment`
